@@ -577,6 +577,12 @@ new MegaMenu({...}).init();
 | classes            | object      | <pre>{<br>&nbsp;&nbsp;levelWrapper: 'level-wrapper',<br>&nbsp;&nbsp;subLevelOpen: 'open',<br>&nbsp;&nbsp;activeItems: 'is-active'<br>}</pre> | Selectors that are used internally or states that will be added to elements |
 </details>
 
+
+## Known issue(s)
+
+At the moment the mega menu only works for static positioned headers. If your header uses `position: sticky;` or `fixed`,
+you might run into [this problem](https://github.com/ryze-digital/mega-menu/issues/3). 
+
 ## Demos
 
 Check out this repository to run the demos in a browser.
