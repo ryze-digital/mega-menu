@@ -78,6 +78,11 @@ button {
 .mega-menu .level-wrapper.open {
   translate: 0;
 }
+@media screen and (max-width: 63.9875em) {
+  .mega-menu .level-wrapper:has(.open) {
+    overflow: hidden;
+  }
+}
 @media screen and (min-width: 64em) {
   .mega-menu .level-wrapper {
     overflow: visible;
