@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-npm i @ryze-digital/mega-menu
+npm i @ryze-digital/mega-menu --save
 ```
 
 ## Usage
