@@ -71,7 +71,7 @@ export class HeightEqualizer extends Base {
         } else {
             this.stop();
         }
-    }
+    };
 
     /**
      *

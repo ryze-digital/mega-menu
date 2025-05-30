@@ -65,6 +65,7 @@ export class MegaMenu extends utils.Base {
 
     init() {
         let outsideClickBound = false;
+
         this.#topLevelWrapper = this.options.el.querySelector('.level-wrapper');
 
         this.on(this.options.menuToggle, 'click', () => {
@@ -127,6 +128,7 @@ export class MegaMenu extends utils.Base {
          */
         this.emitEvent('beforeDestroy');
 
+        this.#closeAllSubLevels();
         this.#breakpoint.removeListener(this.#checkBreakpoint);
         this.#heightEqualizer.destroy();
         this.offAll();
@@ -145,7 +147,7 @@ export class MegaMenu extends utils.Base {
         } else {
             this.#setInert(this.#topLevelWrapper, true);
         }
-    }
+    };
 
     #back = ({ target }) => {
         const subLevel = target.closest(`.${this.options.classes.subLevelOpen}`);
