@@ -28,6 +28,11 @@ export class MegaMenu extends utils.Base {
     #activeItems;
 
     /**
+     * @type {HTMLElement}
+     */
+    #topLevelWrapper;
+
+    /**
      *
      * @param {object} options
      * @param {HTMLElement} [options.el]
@@ -60,14 +65,14 @@ export class MegaMenu extends utils.Base {
 
     init() {
         let outsideClickBound = false;
-        const topLevelWrapper = this.options.el.querySelector('.level-wrapper');
+        this.#topLevelWrapper = this.options.el.querySelector('.level-wrapper');
 
-        this.options.menuToggle.addEventListener('click', () => {
+        this.on(this.options.menuToggle, 'click', () => {
             this.#toggleSubLevel(this.options.el.querySelector(`.${this.options.classes.levelWrapper}`));
         });
 
         this.#subLevelTriggers.forEach((trigger) => {
-            trigger.addEventListener('click', ({ target }) => {
+            this.on(trigger, 'click', ({ target }) => {
                 this.#closeSiblingSubLevels(target);
                 this.#toggleSubLevel(target.closest('button').nextElementSibling);
 
@@ -79,34 +84,26 @@ export class MegaMenu extends utils.Base {
         });
 
         this.options.el.querySelectorAll('[data-back]').forEach((backButton) => {
-            backButton.addEventListener('click', this.#back);
+            this.on(backButton, 'click', this.#back);
         });
 
         this.options.el.querySelectorAll('[data-close]').forEach((closeButton) => {
-            closeButton.addEventListener('click', () => {
+            this.on(closeButton, 'click', () => {
                 this.#closeAllSubLevels();
             });
         });
 
         if (this.#breakpoint.matches) {
-            this.#setInert(topLevelWrapper, false);
+            this.#setInert(this.#topLevelWrapper, false);
         }
 
-        this.#breakpoint.addListener(() => {
-            this.#closeAllSubLevels();
-
-            if (this.#breakpoint.matches) {
-                this.#setInert(topLevelWrapper, false);
-            } else {
-                this.#setInert(topLevelWrapper, true);
-            }
-        });
+        this.#breakpoint.addListener(this.#checkBreakpoint);
 
         if (this.options.openActiveSubLevel) {
             this.#openActiveSubLevel();
         }
 
-        document.addEventListener ('keydown', (event) => {
+        this.on(document, 'keydown', (event) => {
             if (event.key === 'Escape') {
                 const openSubLevel = this.options.el.querySelector(`.${this.options.classes.subLevelOpen}`);
 
@@ -117,6 +114,37 @@ export class MegaMenu extends utils.Base {
                 this.#closeSubLevel(openSubLevel);
             }
         });
+    }
+
+    /**
+     *
+     * @fires MegaMenu#beforeDestroy
+     * @fires MegaMenu#afterDestroy
+     */
+    destroy() {
+        /**
+         * @event MegaMenu#beforeDestroy
+         */
+        this.emitEvent('beforeDestroy');
+
+        this.#breakpoint.removeListener(this.#checkBreakpoint);
+        this.#heightEqualizer.destroy();
+        this.offAll();
+
+        /**
+         * @event MegaMenu#afterDestroy
+         */
+        this.emitEvent('afterDestroy');
+    }
+
+    #checkBreakpoint = () => {
+        this.#closeAllSubLevels();
+
+        if (this.#breakpoint.matches) {
+            this.#setInert(this.#topLevelWrapper, false);
+        } else {
+            this.#setInert(this.#topLevelWrapper, true);
+        }
     }
 
     #back = ({ target }) => {
@@ -202,11 +230,11 @@ export class MegaMenu extends utils.Base {
 
                 if (event.propertyName === 'translate') {
                     subLevel.style.transform = '';
-                    subLevel.removeEventListener('transitionend', handleTransitionEnd);
+                    this.off(subLevel, 'transitionend');
                 }
             };
 
-            subLevel.addEventListener('transitionend', handleTransitionEnd);
+            this.on(subLevel,'transitionend', handleTransitionEnd);
         }
     }
 
@@ -268,7 +296,7 @@ export class MegaMenu extends utils.Base {
     }
 
     #bindOutsideClick() {
-        document.addEventListener('click', (event) => {
+        this.on(document, 'click', (event) => {
             if (this.#breakpoint.matches && !this.options.el.contains(event.target) && this.options.el.querySelector(`.${this.options.classes.subLevelOpen}`) !== null) {
                 this.#closeSubLevel(this.options.el.querySelector(`.${this.options.classes.subLevelOpen}`));
             }

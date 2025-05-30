@@ -1,15 +1,10 @@
-import { ReduceFunctionCalls } from '@ryze-digital/js-utilities';
+import { ReduceFunctionCalls, Base } from '@ryze-digital/js-utilities';
 
-export class HeightEqualizer {
+export class HeightEqualizer extends Base {
     /**
      * @type {boolean}
      */
     #observe = false;
-
-    /**
-     * @type {object}
-     */
-    #options;
 
     /**
      * @type {NodeList}
@@ -27,19 +22,14 @@ export class HeightEqualizer {
      * @param {MediaQueryList} breakpoint
      */
     constructor(options, breakpoint) {
-        this.#options = options;
+        super(options);
+
         this.#breakpoint = breakpoint;
-        this.#secondLevels = this.#options.el.querySelectorAll('.level-wrapper:is(nav > .level-wrapper) > ul > li > .level-wrapper');
+        this.#secondLevels = this.options.el.querySelectorAll('.level-wrapper:is(nav > .level-wrapper) > ul > li > .level-wrapper');
 
-        this.#breakpoint.addListener(() => {
-            if (this.#breakpoint.matches) {
-                this.#resetHeights('0px');
-            } else {
-                this.stop();
-            }
-        });
+        this.#breakpoint.addListener(this.#checkBreakpoint);
 
-        window.addEventListener('resize', ReduceFunctionCalls.throttle(this.equalize.bind(this)));
+        this.on(window, 'resize', ReduceFunctionCalls.throttle(this.equalize.bind(this)));
     }
 
     start() {
@@ -70,12 +60,25 @@ export class HeightEqualizer {
         });
     }
 
+    destroy() {
+        this.#breakpoint.removeListener(this.#checkBreakpoint);
+        this.offAll();
+    }
+
+    #checkBreakpoint = () => {
+        if (this.#breakpoint.matches) {
+            this.#resetHeights('0px');
+        } else {
+            this.stop();
+        }
+    }
+
     /**
      *
      * @returns {number}
      */
     #getHighestListHeight() {
-        const openLists = this.#options.el.querySelectorAll(`.${this.#options.classes.subLevelOpen} > ul`);
+        const openLists = this.options.el.querySelectorAll(`.${this.options.classes.subLevelOpen} > ul`);
         const heights = [];
         const currentHeight = this.#secondLevels[0].getBoundingClientRect().height;
 
