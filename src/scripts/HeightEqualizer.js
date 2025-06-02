@@ -63,6 +63,10 @@ export class HeightEqualizer extends Base {
     destroy() {
         this.#breakpoint.removeListener(this.#checkBreakpoint);
         this.offAll();
+
+        this.#secondLevels.forEach((secondLevel) => {
+            secondLevel.style.removeProperty('height');
+        });
     }
 
     #checkBreakpoint = () => {
