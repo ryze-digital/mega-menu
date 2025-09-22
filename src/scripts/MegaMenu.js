@@ -171,11 +171,29 @@ export class MegaMenu extends utils.Base {
 
     /**
      *
+     * @fires MegaMenu#beforeMenuOpen
+     * @fires MegaMenu#beforeSublevelOpen
+     * @fires MegaMenu#afterMenuOpen
+     * @fires MegaMenu#afterSublevelOpen
      * @param {HTMLDivElement} subLevel
      */
     #openSubLevel(subLevel) {
         const parentLevels = this.#getParents(subLevel, '.level-wrapper').length;
         const subLevelTrigger = subLevel.previousElementSibling;
+
+        let eventType = parentLevels === 0 ? 'Menu' : 'Sublevel';
+
+        if (this.#breakpoint.matches) {
+            eventType = parentLevels === 1 ? 'Menu' : 'Sublevel';
+        }
+
+        /**
+         * @event MegaMenu#beforeMenuOpen
+         */
+        /**
+         * @event MegaMenu#beforeSublevelOpen
+         */
+        this.emitEvent(`before${eventType}Open`);
 
         if (parentLevels === 1 && this.#breakpoint.matches) {
             this.#heightEqualizer.start();
@@ -199,15 +217,41 @@ export class MegaMenu extends utils.Base {
         if (parentLevels === 0) {
             this.options.menuToggle.ariaExpanded = 'true';
         }
+
+        /**
+         * @event MegaMenu#afterMenuOpen
+         */
+        /**
+         * @event MegaMenu#afterSublevelOpen
+         */
+        this.emitEvent(`after${eventType}Open`);
     }
 
     /**
      *
+     * @fires MegaMenu#beforeMenuClose
+     * @fires MegaMenu#beforeSublevelClose
+     * @fires MegaMenu#afterMenuClose
+     * @fires MegaMenu#afterSublevelClose
      * @param {HTMLDivElement} subLevel
      */
     #closeSubLevel(subLevel) {
         const parentLevels = this.#getParents(subLevel, '.level-wrapper').length;
         const subLevelTrigger = subLevel.previousElementSibling;
+
+        let eventType = parentLevels === 0 ? 'Menu' : 'Sublevel';
+
+        if (this.#breakpoint.matches) {
+            eventType = parentLevels === 1 ? 'Menu' : 'Sublevel';
+        }
+
+        /**
+         * @event MegaMenu#beforeMenuClose
+         */
+        /**
+         * @event MegaMenu#beforeSublevelClose
+         */
+        this.emitEvent(`before${eventType}Close`);
 
         subLevel.classList.remove(this.options.classes.subLevelOpen);
         this.#setInert(subLevel, true);
@@ -238,6 +282,14 @@ export class MegaMenu extends utils.Base {
 
             this.on(subLevel,'transitionend', handleTransitionEnd);
         }
+
+        /**
+         * @event MegaMenu#afterMenuClose
+         */
+        /**
+         * @event MegaMenu#afterSublevelClose
+         */
+        this.emitEvent(`after${eventType}Close`);
     }
 
     /**
