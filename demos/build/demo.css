@@ -41,6 +41,16 @@ button {
   cursor: pointer;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  /* stylelint-disable declaration-no-important */
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* stylelint-enable declaration-no-important */
+}
 .visually-hidden {
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
@@ -51,13 +61,13 @@ button {
   width: 1px;
 }
 
-.mega-menu .toggle {
-  margin-inline-start: auto;
-}
 @media screen and (min-width: 64em) {
   .mega-menu .toggle {
     display: none;
   }
+}
+.mega-menu .toggle {
+  margin-inline-start: auto;
 }
 .mega-menu .level-wrapper {
   overflow: auto;
@@ -142,7 +152,7 @@ button {
   padding-inline-end: 2rem;
 }
 .mega-menu ul li:has(ul) > button::after {
-  content: "›";
+  content: "›"/"";
   /* stylelint-disable-next-line declaration-no-important */
   font-family: "icomoon" !important;
   font-style: normal;
@@ -191,7 +201,7 @@ button {
   }
 }
 .mega-menu .back button::before {
-  content: "‹";
+  content: "‹"/"";
   /* stylelint-disable-next-line declaration-no-important */
   font-family: "icomoon" !important;
   font-style: normal;
@@ -216,7 +226,7 @@ button {
   padding-inline-end: 2.5rem;
 }
 .mega-menu .close button::after {
-  content: "✖";
+  content: "✖"/"";
   /* stylelint-disable-next-line declaration-no-important */
   font-family: "icomoon" !important;
   font-style: normal;
@@ -249,7 +259,6 @@ button {
 }
 .mega-menu .teaser {
   display: none;
-  padding-inline-end: 1.5625rem;
 }
 @media screen and (min-width: 64em) {
   .mega-menu .teaser {
@@ -257,6 +266,9 @@ button {
     padding-block-start: 0.5rem;
     padding-block-end: 2rem;
   }
+}
+.mega-menu .teaser {
+  padding-inline-end: 1.5625rem;
 }
 .mega-menu > .level-wrapper {
   position: fixed;
@@ -287,8 +299,6 @@ button {
 }
 .mega-menu > .level-wrapper > ul ul {
   min-block-size: 100%;
-  display: flex;
-  flex-direction: column;
 }
 @media screen and (min-width: 64em) {
   .mega-menu > .level-wrapper > ul ul {
@@ -297,6 +307,10 @@ button {
     padding-block-start: 0.5rem;
     padding-block-end: 2rem;
   }
+}
+.mega-menu > .level-wrapper > ul ul {
+  display: flex;
+  flex-direction: column;
 }
 .mega-menu > .level-wrapper > ul ul > .title {
   order: 1;
@@ -316,10 +330,6 @@ button {
     padding-inline-end: 1.5625rem;
   }
 }
-.mega-menu > .level-wrapper > ul > li > a,
-.mega-menu > .level-wrapper > ul > li > button {
-  background-color: transparent;
-}
 @media screen and (min-width: 64em) {
   .mega-menu > .level-wrapper > ul > li > a,
   .mega-menu > .level-wrapper > ul > li > button {
@@ -328,6 +338,10 @@ button {
     padding-inline-start: 0.9375rem;
     padding-inline-end: 0.9375rem;
   }
+}
+.mega-menu > .level-wrapper > ul > li > a,
+.mega-menu > .level-wrapper > ul > li > button {
+  background-color: transparent;
 }
 @media screen and (min-width: 64em) {
   .mega-menu > .level-wrapper > ul > li > .level-wrapper {
