@@ -234,7 +234,7 @@ export class MegaMenu extends utils.Base {
      * @fires MegaMenu#afterMenuClose
      * @fires MegaMenu#afterSublevelClose
      * @param {HTMLDivElement} subLevel
-     * @param {boolean} [onViewSizeChange=false]
+     * @param {boolean} onViewSizeChange
      */
     #closeSubLevel(subLevel, onViewSizeChange = false) {
         const parentLevels = this.#getParents(subLevel, '.level-wrapper').length;
@@ -300,7 +300,7 @@ export class MegaMenu extends utils.Base {
     /**
      *
      * @param {HTMLElement} parent
-     * @param {boolean} [onViewSizeChange=false]
+     * @param {boolean} onViewSizeChange
      */
     #closeAllSubLevels(parent = this.options.el, onViewSizeChange = false) {
         parent.querySelectorAll(`.${this.options.classes.subLevelOpen}`).forEach((openElement) => {
