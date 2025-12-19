@@ -140,7 +140,7 @@ export class MegaMenu extends utils.Base {
     }
 
     #checkBreakpoint = () => {
-        this.#closeAllSubLevels();
+        this.#closeAllSubLevels(this.options.el, true);
 
         if (this.#breakpoint.matches) {
             this.#setInert(this.#topLevelWrapper, false);
@@ -171,11 +171,29 @@ export class MegaMenu extends utils.Base {
 
     /**
      *
+     * @fires MegaMenu#beforeMenuOpen
+     * @fires MegaMenu#beforeSublevelOpen
+     * @fires MegaMenu#afterMenuOpen
+     * @fires MegaMenu#afterSublevelOpen
      * @param {HTMLDivElement} subLevel
      */
     #openSubLevel(subLevel) {
         const parentLevels = this.#getParents(subLevel, '.level-wrapper').length;
         const subLevelTrigger = subLevel.previousElementSibling;
+
+        let eventType = parentLevels === 0 ? 'Menu' : 'Sublevel';
+
+        if (this.#breakpoint.matches) {
+            eventType = parentLevels === 1 ? 'Menu' : 'Sublevel';
+        }
+
+        /**
+         * @event MegaMenu#beforeMenuOpen
+         */
+        /**
+         * @event MegaMenu#beforeSublevelOpen
+         */
+        this.emitEvent(`before${eventType}Open`);
 
         if (parentLevels === 1 && this.#breakpoint.matches) {
             this.#heightEqualizer.start();
@@ -199,15 +217,46 @@ export class MegaMenu extends utils.Base {
         if (parentLevels === 0) {
             this.options.menuToggle.ariaExpanded = 'true';
         }
+
+        /**
+         * @event MegaMenu#afterMenuOpen
+         */
+        /**
+         * @event MegaMenu#afterSublevelOpen
+         */
+        this.emitEvent(`after${eventType}Open`);
     }
 
     /**
      *
+     * @fires MegaMenu#beforeMenuClose
+     * @fires MegaMenu#beforeSublevelClose
+     * @fires MegaMenu#afterMenuClose
+     * @fires MegaMenu#afterSublevelClose
      * @param {HTMLDivElement} subLevel
+     * @param {boolean} onViewSizeChange
      */
-    #closeSubLevel(subLevel) {
+    #closeSubLevel(subLevel, onViewSizeChange = false) {
         const parentLevels = this.#getParents(subLevel, '.level-wrapper').length;
         const subLevelTrigger = subLevel.previousElementSibling;
+
+        let eventType = parentLevels === 0 ? 'Menu' : 'Sublevel';
+
+        if (this.#breakpoint.matches) {
+            eventType = parentLevels === 1 ? 'Menu' : 'Sublevel';
+        }
+
+        if (onViewSizeChange) {
+            eventType = 'Menu';
+        }
+
+        /**
+         * @event MegaMenu#beforeMenuClose
+         */
+        /**
+         * @event MegaMenu#beforeSublevelClose
+         */
+        this.emitEvent(`before${eventType}Close`);
 
         subLevel.classList.remove(this.options.classes.subLevelOpen);
         this.#setInert(subLevel, true);
@@ -238,15 +287,24 @@ export class MegaMenu extends utils.Base {
 
             this.on(subLevel,'transitionend', handleTransitionEnd);
         }
+
+        /**
+         * @event MegaMenu#afterMenuClose
+         */
+        /**
+         * @event MegaMenu#afterSublevelClose
+         */
+        this.emitEvent(`after${eventType}Close`);
     }
 
     /**
      *
      * @param {HTMLElement} parent
+     * @param {boolean} onViewSizeChange
      */
-    #closeAllSubLevels(parent = this.options.el) {
+    #closeAllSubLevels(parent = this.options.el, onViewSizeChange = false) {
         parent.querySelectorAll(`.${this.options.classes.subLevelOpen}`).forEach((openElement) => {
-            this.#closeSubLevel(openElement);
+            this.#closeSubLevel(openElement, onViewSizeChange);
             openElement.style.removeProperty('transform');
         });
     }
