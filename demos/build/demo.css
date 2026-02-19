@@ -152,7 +152,7 @@ button {
   padding-inline-end: 2rem;
 }
 .mega-menu ul li:has(ul) > button::after {
-  content: "›"/"";
+  --icon: "›";
   /* stylelint-disable-next-line declaration-no-important */
   font-family: "icomoon" !important;
   font-style: normal;
@@ -163,6 +163,16 @@ button {
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+@supports (content: "›"/"") {
+  .mega-menu ul li:has(ul) > button::after {
+    --icon: "›" / "";
+  }
+}
+.mega-menu ul li:has(ul) > button::after {
+  content: var(--icon);
+}
+.mega-menu ul li:has(ul) > button::after {
   position: absolute;
   inset-inline-end: 1rem;
   inset-block-start: 0.875em;
@@ -201,7 +211,7 @@ button {
   }
 }
 .mega-menu .back button::before {
-  content: "‹"/"";
+  --icon: "‹";
   /* stylelint-disable-next-line declaration-no-important */
   font-family: "icomoon" !important;
   font-style: normal;
@@ -212,6 +222,16 @@ button {
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+@supports (content: "‹"/"") {
+  .mega-menu .back button::before {
+    --icon: "‹" / "";
+  }
+}
+.mega-menu .back button::before {
+  content: var(--icon);
+}
+.mega-menu .back button::before {
   position: absolute;
   inset-inline-start: 1rem;
   inset-block-start: 0.875em;
@@ -226,7 +246,7 @@ button {
   padding-inline-end: 2.5rem;
 }
 .mega-menu .close button::after {
-  content: "✖"/"";
+  --icon: "✖";
   /* stylelint-disable-next-line declaration-no-important */
   font-family: "icomoon" !important;
   font-style: normal;
@@ -237,6 +257,16 @@ button {
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+@supports (content: "✖"/"") {
+  .mega-menu .close button::after {
+    --icon: "✖" / "";
+  }
+}
+.mega-menu .close button::after {
+  content: var(--icon);
+}
+.mega-menu .close button::after {
   position: absolute;
   inset-inline-end: 1rem;
   inset-block-start: 1.25em;
