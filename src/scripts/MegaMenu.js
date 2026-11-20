@@ -1,5 +1,5 @@
-import * as utils from '@ryze-digital/js-utilities';
-import { HeightEqualizer } from './HeightEqualizer.js';
+import * as utils from "@ryze-digital/js-utilities";
+import { HeightEqualizer } from "./HeightEqualizer.js";
 
 export class MegaMenu extends utils.Base {
     /**
@@ -44,21 +44,26 @@ export class MegaMenu extends utils.Base {
      * @param {string} [options.classes.activeItems]
      */
     constructor(options) {
-        super({
-            el: document.querySelector('[data-mega-menu]'),
-            menuToggle: document.querySelector('[data-mega-menu-toggle]'),
-            breakpoint: 'large',
-            openActiveSubLevel: true,
-            classes: {
-                levelWrapper: 'level-wrapper',
-                subLevelOpen: 'open',
-                activeItems: 'is-active'
-            }
-        }, options);
+        super(
+            {
+                el: document.querySelector("[data-mega-menu]"),
+                menuToggle: document.querySelector("[data-mega-menu-toggle]"),
+                breakpoint: "large",
+                openActiveSubLevel: true,
+                classes: {
+                    levelWrapper: "level-wrapper",
+                    subLevelOpen: "open",
+                    activeItems: "is-active",
+                },
+            },
+            options,
+        );
 
-        this.#subLevelTriggers = this.options.el.querySelectorAll('li:has(ul) > button');
+        this.#subLevelTriggers = this.options.el.querySelectorAll("li:has(ul) > button");
         this.#breakpointProvider = new utils.BreakpointProvider();
-        this.#breakpoint = window.matchMedia(`(min-width: ${this.#breakpointProvider.breakpoints[this.options.breakpoint]})`);
+        this.#breakpoint = window.matchMedia(
+            `(min-width: ${this.#breakpointProvider.breakpoints[this.options.breakpoint]})`,
+        );
         this.#heightEqualizer = new HeightEqualizer(this.options, this.#breakpoint);
         this.#activeItems = this.options.el.querySelectorAll(`.${this.options.classes.activeItems}`);
     }
@@ -66,30 +71,30 @@ export class MegaMenu extends utils.Base {
     init() {
         let outsideClickBound = false;
 
-        this.#topLevelWrapper = this.options.el.querySelector('.level-wrapper');
+        this.#topLevelWrapper = this.options.el.querySelector(".level-wrapper");
 
-        this.on(this.options.menuToggle, 'click', () => {
+        this.on(this.options.menuToggle, "click", () => {
             this.#toggleSubLevel(this.options.el.querySelector(`.${this.options.classes.levelWrapper}`));
         });
 
         this.#subLevelTriggers.forEach((trigger) => {
-            this.on(trigger, 'click', ({ target }) => {
+            this.on(trigger, "click", ({ target }) => {
                 this.#closeSiblingSubLevels(target);
-                this.#toggleSubLevel(target.closest('button').nextElementSibling);
+                this.#toggleSubLevel(target.closest("button").nextElementSibling);
 
-                if (this.#getParents(trigger, '.level-wrapper').length === 1 && outsideClickBound === false) {
+                if (this.#getParents(trigger, ".level-wrapper").length === 1 && outsideClickBound === false) {
                     this.#bindOutsideClick();
                     outsideClickBound = true;
                 }
             });
         });
 
-        this.options.el.querySelectorAll('[data-back]').forEach((backButton) => {
-            this.on(backButton, 'click', this.#back);
+        this.options.el.querySelectorAll("[data-back]").forEach((backButton) => {
+            this.on(backButton, "click", this.#back);
         });
 
-        this.options.el.querySelectorAll('[data-close]').forEach((closeButton) => {
-            this.on(closeButton, 'click', () => {
+        this.options.el.querySelectorAll("[data-close]").forEach((closeButton) => {
+            this.on(closeButton, "click", () => {
                 this.#closeAllSubLevels();
             });
         });
@@ -104,8 +109,8 @@ export class MegaMenu extends utils.Base {
             this.#openActiveSubLevel();
         }
 
-        this.on(document, 'keydown', (event) => {
-            if (event.key === 'Escape') {
+        this.on(document, "keydown", (event) => {
+            if (event.key === "Escape") {
                 const openSubLevel = this.options.el.querySelector(`.${this.options.classes.subLevelOpen}`);
 
                 if (openSubLevel === null) {
@@ -126,7 +131,7 @@ export class MegaMenu extends utils.Base {
         /**
          * @event MegaMenu#beforeDestroy
          */
-        this.emitEvent('beforeDestroy');
+        this.emitEvent("beforeDestroy");
 
         this.#closeAllSubLevels();
         this.#breakpoint.removeListener(this.#checkBreakpoint);
@@ -136,7 +141,7 @@ export class MegaMenu extends utils.Base {
         /**
          * @event MegaMenu#afterDestroy
          */
-        this.emitEvent('afterDestroy');
+        this.emitEvent("afterDestroy");
     }
 
     #checkBreakpoint = () => {
@@ -178,13 +183,13 @@ export class MegaMenu extends utils.Base {
      * @param {HTMLDivElement} subLevel
      */
     #openSubLevel(subLevel) {
-        const parentLevels = this.#getParents(subLevel, '.level-wrapper').length;
+        const parentLevels = this.#getParents(subLevel, ".level-wrapper").length;
         const subLevelTrigger = subLevel.previousElementSibling;
 
-        let eventType = parentLevels === 0 ? 'Menu' : 'Sublevel';
+        let eventType = parentLevels === 0 ? "Menu" : "Sublevel";
 
         if (this.#breakpoint.matches) {
-            eventType = parentLevels === 1 ? 'Menu' : 'Sublevel';
+            eventType = parentLevels === 1 ? "Menu" : "Sublevel";
         }
 
         /**
@@ -200,9 +205,9 @@ export class MegaMenu extends utils.Base {
         }
 
         if (parentLevels > 0 && !this.#breakpoint.matches) {
-            const directParentLevel = this.#getParents(subLevel, '.level-wrapper')[0];
+            const directParentLevel = this.#getParents(subLevel, ".level-wrapper")[0];
 
-            if (directParentLevel.querySelector('ul').offsetHeight > subLevel.querySelector('ul').offsetHeight) {
+            if (directParentLevel.querySelector("ul").offsetHeight > subLevel.querySelector("ul").offsetHeight) {
                 subLevel.style.transform = `translateY(${directParentLevel.scrollTop}px)`;
             }
         }
@@ -211,11 +216,11 @@ export class MegaMenu extends utils.Base {
         this.#setInert(subLevel, false);
 
         if (subLevelTrigger !== null) {
-            subLevelTrigger.ariaExpanded = 'true';
+            subLevelTrigger.ariaExpanded = "true";
         }
 
         if (parentLevels === 0) {
-            this.options.menuToggle.ariaExpanded = 'true';
+            this.options.menuToggle.ariaExpanded = "true";
         }
 
         /**
@@ -237,17 +242,17 @@ export class MegaMenu extends utils.Base {
      * @param {boolean} onViewSizeChange
      */
     #closeSubLevel(subLevel, onViewSizeChange = false) {
-        const parentLevels = this.#getParents(subLevel, '.level-wrapper').length;
+        const parentLevels = this.#getParents(subLevel, ".level-wrapper").length;
         const subLevelTrigger = subLevel.previousElementSibling;
 
-        let eventType = parentLevels === 0 ? 'Menu' : 'Sublevel';
+        let eventType = parentLevels === 0 ? "Menu" : "Sublevel";
 
         if (this.#breakpoint.matches) {
-            eventType = parentLevels === 1 ? 'Menu' : 'Sublevel';
+            eventType = parentLevels === 1 ? "Menu" : "Sublevel";
         }
 
         if (onViewSizeChange) {
-            eventType = 'Menu';
+            eventType = "Menu";
         }
 
         /**
@@ -262,14 +267,14 @@ export class MegaMenu extends utils.Base {
         this.#setInert(subLevel, true);
 
         if (subLevelTrigger !== null) {
-            subLevelTrigger.ariaExpanded = 'false';
+            subLevelTrigger.ariaExpanded = "false";
         }
 
         if (parentLevels === 0) {
-            this.options.menuToggle.ariaExpanded = 'false';
+            this.options.menuToggle.ariaExpanded = "false";
         }
 
-        if(parentLevels === 1) {
+        if (parentLevels === 1) {
             this.#heightEqualizer.stop();
         }
 
@@ -279,13 +284,13 @@ export class MegaMenu extends utils.Base {
                     return;
                 }
 
-                if (event.propertyName === 'translate') {
-                    subLevel.style.transform = '';
-                    this.off(subLevel, 'transitionend');
+                if (event.propertyName === "translate") {
+                    subLevel.style.transform = "";
+                    this.off(subLevel, "transitionend");
                 }
             };
 
-            this.on(subLevel,'transitionend', handleTransitionEnd);
+            this.on(subLevel, "transitionend", handleTransitionEnd);
         }
 
         /**
@@ -305,7 +310,7 @@ export class MegaMenu extends utils.Base {
     #closeAllSubLevels(parent = this.options.el, onViewSizeChange = false) {
         parent.querySelectorAll(`.${this.options.classes.subLevelOpen}`).forEach((openElement) => {
             this.#closeSubLevel(openElement, onViewSizeChange);
-            openElement.style.removeProperty('transform');
+            openElement.style.removeProperty("transform");
         });
     }
 
@@ -314,7 +319,7 @@ export class MegaMenu extends utils.Base {
      * @param {HTMLElement} clickedElement
      */
     #closeSiblingSubLevels(clickedElement) {
-        const li = clickedElement.closest('li');
+        const li = clickedElement.closest("li");
 
         utils.Selectors.siblings(li).forEach((sibling) => {
             this.#closeAllSubLevels(sibling);
@@ -356,8 +361,12 @@ export class MegaMenu extends utils.Base {
     }
 
     #bindOutsideClick() {
-        this.on(document, 'click', (event) => {
-            if (this.#breakpoint.matches && !this.options.el.contains(event.target) && this.options.el.querySelector(`.${this.options.classes.subLevelOpen}`) !== null) {
+        this.on(document, "click", (event) => {
+            if (
+                this.#breakpoint.matches &&
+                !this.options.el.contains(event.target) &&
+                this.options.el.querySelector(`.${this.options.classes.subLevelOpen}`) !== null
+            ) {
                 this.#closeSubLevel(this.options.el.querySelector(`.${this.options.classes.subLevelOpen}`));
             }
         });
