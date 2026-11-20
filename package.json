@@ -7,9 +7,6 @@
   "main": "index.js",
   "type": "module",
   "repository": "github:ryze-digital/mega-menu",
-  "config": {
-    "output": "demos/build"
-  },
   "scripts": {
     "lint": "npm-run-all --parallel lint:*",
     "lint:scripts": "eslint {src,tests}/scripts/**",
