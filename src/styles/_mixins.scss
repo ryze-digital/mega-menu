@@ -267,6 +267,8 @@
         @content;
     }
     &:focus-visible {
+        // Resets the clip of visually-hidden in scss-utilities < 1.2
+        // stylelint-disable-next-line property-no-deprecated
         clip: auto;
         clip-path: none;
         width: fit-content;

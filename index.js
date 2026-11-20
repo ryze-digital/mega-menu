@@ -1,5 +1,3 @@
-import {MegaMenu} from "./src/scripts/MegaMenu.js";
+import { MegaMenu } from "./src/scripts/MegaMenu.js";
 
-export {
-    MegaMenu
-};
+export { MegaMenu };
