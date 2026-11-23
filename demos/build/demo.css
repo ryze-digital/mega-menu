@@ -52,7 +52,6 @@ button {
   /* stylelint-enable declaration-no-important */
 }
 .visually-hidden {
-  clip: rect(0 0 0 0);
   clip-path: inset(50%);
   height: 1px;
   overflow: hidden;
@@ -277,7 +276,6 @@ button {
   }
 }
 .mega-menu .close button:focus-visible {
-  clip: auto;
   clip-path: none;
   width: fit-content;
   height: auto;

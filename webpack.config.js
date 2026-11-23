@@ -1,25 +1,25 @@
-import path from 'path';
+import path from "path";
 
 export default (env, argv) => {
-    let mode = 'development';
+    let mode = "development";
 
     if (!argv.watch) {
-        mode = 'production';
+        mode = "production";
     }
 
     return {
         devtool: false,
         mode,
-        entry: './index.js',
+        entry: "./index.js",
         output: {
-            path: path.resolve('./demos/build'),
-            filename: 'demo.js',
+            path: path.resolve("./demos/build"),
+            filename: "demo.js",
             library: {
-                type: 'module',
-            }
+                type: "module",
+            },
         },
         experiments: {
-            outputModule: true
-        }
+            outputModule: true,
+        },
     };
 };

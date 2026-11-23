@@ -267,7 +267,6 @@
         @content;
     }
     &:focus-visible {
-        clip: auto;
         clip-path: none;
         width: fit-content;
         height: auto;

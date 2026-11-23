@@ -1,4 +1,4 @@
-import { ReduceFunctionCalls, Base } from '@ryze-digital/js-utilities';
+import { ReduceFunctionCalls, Base } from "@ryze-digital/js-utilities";
 
 export class HeightEqualizer extends Base {
     /**
@@ -25,11 +25,13 @@ export class HeightEqualizer extends Base {
         super(options);
 
         this.#breakpoint = breakpoint;
-        this.#secondLevels = this.options.el.querySelectorAll('.level-wrapper:is(nav > .level-wrapper) > ul > li > .level-wrapper');
+        this.#secondLevels = this.options.el.querySelectorAll(
+            ".level-wrapper:is(nav > .level-wrapper) > ul > li > .level-wrapper",
+        );
 
         this.#breakpoint.addListener(this.#checkBreakpoint);
 
-        this.on(window, 'resize', ReduceFunctionCalls.throttle(this.equalize.bind(this)));
+        this.on(window, "resize", ReduceFunctionCalls.throttle(this.equalize.bind(this)));
     }
 
     start() {
@@ -40,7 +42,7 @@ export class HeightEqualizer extends Base {
         this.#observe = false;
 
         if (this.#breakpoint.matches) {
-            this.#resetHeights('0px');
+            this.#resetHeights("0px");
         } else {
             this.#resetHeights();
         }
@@ -65,13 +67,13 @@ export class HeightEqualizer extends Base {
         this.offAll();
 
         this.#secondLevels.forEach((secondLevel) => {
-            secondLevel.style.removeProperty('height');
+            secondLevel.style.removeProperty("height");
         });
     }
 
     #checkBreakpoint = () => {
         if (this.#breakpoint.matches) {
-            this.#resetHeights('0px');
+            this.#resetHeights("0px");
         } else {
             this.stop();
         }
@@ -103,7 +105,7 @@ export class HeightEqualizer extends Base {
      *
      * @param {string} height
      */
-    #resetHeights(height = 'auto') {
+    #resetHeights(height = "auto") {
         this.#secondLevels.forEach((secondLevel) => {
             secondLevel.style.height = height;
         });
